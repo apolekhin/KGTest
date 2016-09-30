@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "Orders";
+}
+
+<div class="jumbotron">
+    <h1>Orders</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <input type="search" class="table-filter form-control" data-table="order-table" placeholder="Filter">
+        <table class="table-condensed order-table table" id="table-paging">
+            <thead>
+                <tr id="theading">
+                    <th><p>ID</p></th>
+                    <th><p>Number</p></th>
+                    <th><p>Creation Date</p></th>
+                    <th><p>Shipment Date</p></th>
+                    <th><p>Manager</p></th>
+                    <th><p>Comment</p></th>
+                    <th><p>Action</p></th>
+                </tr>
+            </thead>
+            
+            @foreach (var o in ViewBag.Orders)
+            {
+                <tr>
+                    <td><p>@o.ID</p></td>
+                    <td><p>@o.Number</p></td>
+                    <td><p>@o.CreationDate</p></td>
+                    <td><p>@o.UnloadDate</p></td>
+                    <td><p>@o.Manager</p></td>
+                    <td><p>@o.Comment</p></td>
+                    <td><p><a href="/Home/EditOrder/@o.ID">Edit</a></p><p><a href="/Home/DeleteOrder/@o.ID">Delete</a></p></td>
+                </tr>
+            }
+        </table>
+        
+    @*adding buttons for paging*@
+        @{
+            int count = 1;
+            int num = 1;
+            foreach (var o in ViewBag.Orders)
+            {
+                if ( (count - 1) % 5 == 0)
+                {
+                    <input type="button" onclick="paging(@(count),@(count+4))" value="@num" />
+                    num++;
+                }
+                count++;
+            }
+        }
+        <input id="addbtn" type="button" class="btn btn-primary" value="Add" onclick="location.href='@Url.Action("AddOrder","Home")'"/>
+    </div>
+</div>
+<script>
+    //filter
+    (function (document) {
+        'use strict';
+
+        var TableFilter = (function (Arr) {
+
+            var _input;
+
+            function _onInputEvent(e) {
+                _input = e.target;
+                var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+                Arr.forEach.call(tables, function (table) {
+                    Arr.forEach.call(table.tBodies, function (tbody) {
+                        Arr.forEach.call(tbody.rows, _filter);
+                    });
+                });
+            }
+
+            function _filter(row) {
+                var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+                row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+            }
+
+            return {
+                init: function () {
+                    var inputs = document.getElementsByClassName('table-filter');
+                    Arr.forEach.call(inputs, function (input) {
+                        input.oninput = _onInputEvent;
+                    });
+                }
+            };
+        })(Array.prototype);
+
+        document.addEventListener('readystatechange', function () {
+            if (document.readyState === 'complete') {
+                TableFilter.init();
+            }
+        });
+
+    })(document);
+
+    //paging
+    function paging(rowBeg, rowEnd) {
+        var table = document.getElementById("table-paging");
+        var rowCount = table.rows.length;
+        for (var i = 0; i < rowCount; i++) {
+            if (i >= rowBeg && i <= rowEnd) {
+                table.rows[i].style.display = "table-row";
+                document.getElementById("theading").style.display = "table-row";
+            }
+            else {
+                table.rows[i].style.display = "none";
+                document.getElementById("theading").style.display = "table-row";
+            }
+        }
+    }
+
+    window.onload = paging(0, 5);
+</script>

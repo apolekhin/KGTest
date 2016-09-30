@@ -1,0 +1,35 @@
+﻿@model KGTest.Models.Order
+@{
+    ViewBag.Title = "Delete Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Delete</h2>
+@{Html.BeginForm("DeleteOrder", "Home", FormMethod.Post); }
+<div class="form-group">
+    <label>ID</label>
+    <input class="form-control" name="id" value="@Model.ID" required disabled>
+</div>
+<div class="form-group">
+    <label>Number</label>
+    <input class="form-control" name="number" value="@Model.Number" required disabled>
+</div>
+<div class="form-group">
+    <label>Creation date</label>
+    <input class="form-control" name="creationDate" value="@Model.CreationDate" disabled>
+</div>
+<div class="form-group">
+    <label>Shipment date</label>
+    <input class="form-control" name="shipDate" value="@Model.UnloadDate" disabled>
+</div>
+<div class="form-group">
+    <label>Manager</label>
+    <input class="form-control" name="manager" value="@Model.Manager" required disabled>
+</div>
+<div class="form-group">
+    <label>Comment</label>
+    <input class="form-control" name="comment" value="@Model.Comment" disabled>
+</div>
+<input class="btn btn-danger" type="submit" value="Delete" />
+@{Html.EndForm();}
